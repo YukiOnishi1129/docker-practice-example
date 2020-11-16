@@ -1,0 +1,33 @@
+# バージョンの指定
+version: '3'
+# サービスの定義
+services:
+  webserver:
+    # dockerコンテナのベースイメージを定義する際は「image」を記述
+    # image: ubuntu
+    # Dockerfileをにイメージを記述してビルドする際は「build」とDockerfileのパスを記述
+    build: . # ピリオドでカレントディレクトリを示す
+    depend_on: # 複数のサービスの依存関係
+      # wenserverを起動する前にdbコンテナとredisコンテナを起動する
+      - db
+      - redis
+    ports:
+      # ホストマシンのポート番号：コンテナのポート番号
+      # または、コンテナのポート番号のみ記述（この時ホストのポートはランダムな値が設定される）
+      # YAMLでは「xx:yy」形式を時刻として認識するので、ポートの指定には「""」で囲むように
+      - '80:80'
+    networks:
+      - webnet
+
+  redis:
+    image: redis
+    networks:
+      - webnet
+  db:
+    image: postgres
+# ネットワーク定義
+networks:
+  webnet:
+# データボリューム定義
+volumes:
+  data-volume:

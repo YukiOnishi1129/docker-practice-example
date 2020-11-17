@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  php: # コンテナ
+    build:
+      context: . # Dockerfileのディレクトリを示す
+      dockerfile: Dockerfile
+    container_name: php
+    volumes: # ローカルディレクトリとコンテナ情のディレクトリのリンクを設定
+      - ./src:/var/www/html # ./srcはdocker-compose.ymlファイル直下にあるsrcを設定している
+    ports:
+      - '8000:8000'
